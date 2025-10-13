@@ -1,5 +1,7 @@
 import "./style.scss";
 
+// test commit
+
 function getRotationDeg(img) {
   const styles = window.getComputedStyle(img);
   const transform = styles.transform;
