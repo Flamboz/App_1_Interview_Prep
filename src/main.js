@@ -1,19 +1,13 @@
 import "./style.scss";
 
-// test commit
-
 const env = import.meta.env.VITE_ENVIRONMENT;
-
-// Select the h1 element and set its text based on the environment
 const header = document.getElementById('env-header');
-if (env === 'prod') {
-  header.textContent = 'Hello from PROD';
-} else {
-  header.textContent = 'Hello from DEV';
+if (header) {
+  header.textContent = env === 'prod' ? 'Hello from PROD' : 'Hello from DEV';
 }
 
-// Image rotation and analytics
 
+// Image rotation and analytics
 function getRotationDeg(img) {
   const styles = window.getComputedStyle(img);
   const transform = styles.transform;
