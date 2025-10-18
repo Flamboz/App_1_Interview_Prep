@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   build-and-deploy:
@@ -20,13 +21,27 @@ jobs:
         run: npm run lint
 
       - name: Build project
-        run: npm run build
+        run: |
+          if [ "${GITHUB_REF##*/}" = "main" ]; then
+            echo "Building production..."
+            npm run build:prod
+          else
+            echo "Building development..."
+            npm run build:dev
+          fi
 
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
 
       - name: Deploy
-        run: netlify deploy --dir=dist --prod
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          if [ "${GITHUB_REF##*/}" = "main" ]; then
+            echo "Deploying to production..."
+            netlify deploy --dir=dist --prod
+          else
+            echo "Deploying to dev..."
+            netlify deploy --dir=dist-dev --message="Dev deploy from ${GITHUB_SHA}"
+          fi
